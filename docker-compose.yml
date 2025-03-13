@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  # React Native frontend - static web build for browser compatibility
+  frontend:
+    image: node:18
+    container_name: financial-wellness-frontend
+    restart: always
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./app:/app
+    working_dir: /app
+    environment:
+      - NODE_ENV=development
+    command: >
+      bash -c "echo 'Installing dependencies...' &&
+               npm install --legacy-peer-deps &&
+               echo 'Building web version...' &&
+               npx expo export:web &&
+               echo 'Starting web server on port 3000 (0.0.0.0)...' &&
+               npx serve -s web-build -l 3000 --listen-host 0.0.0.0"
